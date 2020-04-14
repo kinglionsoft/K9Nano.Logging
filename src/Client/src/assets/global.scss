@@ -1,0 +1,20 @@
+// chrome专属滚动条样式
+// 滚动条整体部分
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+  background-color: transparent;
+}
+// 滑块部分
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: rgba(144, 147, 153, 0.5);
+}
+// 左右方按钮
+::-webkit-scrollbar-button:vertical {
+  display: none;
+}
+// 上下方按钮
+::-webkit-scrollbar-button:horizontal {
+  display: none;
+}
