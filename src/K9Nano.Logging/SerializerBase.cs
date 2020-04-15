@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Security.Cryptography;
+using Serilog.Debugging;
 using Serilog.Events;
 
 namespace K9Nano.Logging
@@ -14,6 +16,21 @@ namespace K9Nano.Logging
 
         public abstract LogEntity Deserialize(byte[] data);
         public abstract byte[] Serialize(LogEntity entity);
+
+        public virtual bool TryDeserialize(byte[] data, out LogEntity result)
+        {
+            try
+            {
+                result = Deserialize(data);
+                return true;
+            }
+            catch (Exception e)
+            {
+                SelfLog.WriteLine($"Deserialize failed: {e}");
+                result = null;
+                return false;
+            }
+        }
 
         public virtual LogEntity Map(LogEvent logEvent)
         {
