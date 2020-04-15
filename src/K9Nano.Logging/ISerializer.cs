@@ -1,11 +1,12 @@
-﻿using System;
-using Serilog.Events;
+﻿using Serilog.Events;
 
-namespace LogCenter.Abstractions
+namespace K9Nano.Logging
 {
     public interface ISerializer
     {
-        LogEvent Deserialize(byte[] data);
-        byte[] Serialize(LogEvent logEvent);
+        LogEntity Deserialize(byte[] data);
+        byte[] Serialize(LogEntity entity);
+
+        LogEntity Map(LogEvent logEvent);
     }
 }

@@ -1,43 +1,31 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using DotNetty.Codecs;
 using DotNetty.Handlers.Logging;
 using DotNetty.Transport.Bootstrapping;
 using DotNetty.Transport.Channels;
 using DotNetty.Transport.Channels.Sockets;
-using DotNetty.Transport.Libuv;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace LogCenter.Web.Collector
+namespace K9Nano.Logging.Web.Collector
 {
-    public class CollectorHostedService: IHostedService
+    public class CollectorHostedService : IHostedService
     {
         private readonly ILogger _logger;
-        private  readonly IEventLoopGroup _bossGroup;
         private readonly IEventLoopGroup _workerGroup;
         private IChannel _boundChannel;
         private readonly Bootstrap _bootstrap;
         private readonly ServerOptions _options;
 
-        public CollectorHostedService(IOptionsMonitor<ServerOptions> optionsMonitor, ILogger<CollectorHostedService> logger)
+        public CollectorHostedService(IServiceProvider serviceProvider)
         {
-            _logger = logger;
-            _options = optionsMonitor.CurrentValue;
+            _logger = serviceProvider.GetService<ILogger<CollectorHostedService>>();
+            _options = serviceProvider.GetService<IOptionsMonitor<ServerOptions>>().CurrentValue;
 
-            if (_options.UseLibuv)
-            {
-                var dispatcher = new DispatcherEventLoopGroup();
-                _bossGroup = dispatcher;
-                _workerGroup = new WorkerEventLoopGroup(dispatcher);
-            }
-            else
-            {
-                _bossGroup = new MultithreadEventLoopGroup(1);
-                _workerGroup = new MultithreadEventLoopGroup();
-            }
+            _workerGroup = new MultithreadEventLoopGroup();
 
             _bootstrap = new Bootstrap();
             _bootstrap.Group(_workerGroup)
@@ -45,14 +33,15 @@ namespace LogCenter.Web.Collector
                 .Option(ChannelOption.SoBroadcast, true)
                 .Handler(new ActionChannelInitializer<IChannel>(channel =>
                 {
-                    IChannelPipeline pipeline = channel.Pipeline;
-                    pipeline.AddLast("echo", new EchoServerHandler());
+                    var pipeline = channel.Pipeline;
+                    pipeline.AddLast("LOGGING", new LoggingCollectorServerHandler(serviceProvider));
                 }));
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
             _boundChannel = await _bootstrap.BindAsync(_options.Port);
+            Console.WriteLine($"UDP server started at 0.0.0.0:{_options.Port}");
         }
 
         public async Task StopAsync(CancellationToken cancellationToken)
@@ -62,9 +51,7 @@ namespace LogCenter.Web.Collector
                 await _boundChannel.CloseAsync();
             }
 
-            await Task.WhenAll(
-                _bossGroup.ShutdownGracefullyAsync(TimeSpan.FromMilliseconds(100), TimeSpan.FromSeconds(1)),
-                _workerGroup.ShutdownGracefullyAsync(TimeSpan.FromMilliseconds(100), TimeSpan.FromSeconds(1)));
+            await _workerGroup.ShutdownGracefullyAsync(TimeSpan.FromMilliseconds(100), TimeSpan.FromSeconds(1));
         }
     }
 }

@@ -1,11 +1,16 @@
-using K9Nano.Logging.Web.Collector;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
-namespace K9Nano.Logging.Web
+namespace AspNetCoreSample
 {
     public class Startup
     {
@@ -20,10 +25,6 @@ namespace K9Nano.Logging.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-
-            services.AddHostedService<CollectorHostedService>();
-
-            services.AddSingleton<ISerializer, ProtobufSerializer>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Security;
+using System.Net.Sockets;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,7 +23,6 @@ namespace TestClient
         {
             var group = new MultithreadEventLoopGroup();
 
-            string targetHost = null;
             try
             {
                 var bootstrap = new Bootstrap();
@@ -32,12 +33,31 @@ namespace TestClient
                     .Handler(new ActionChannelInitializer<IChannel>(channel =>
                     {
                         IChannelPipeline pipeline = channel.Pipeline;
-                        pipeline.AddLast("echo", new EchoClientHandler());
+                        pipeline.AddLast("Logging", new LoggingClientHandler());
                     }));
 
-                IChannel clientChannel = await bootstrap.BindAsync(0);
+                IChannel clientChannel = await bootstrap.BindAsync(IPEndPoint.MinPort);
 
-                Console.ReadLine();
+                Console.WriteLine("Sending");
+
+                byte[] bytes = Encoding.UTF8.GetBytes("Hello");
+                IByteBuffer buffer = Unpooled.WrappedBuffer(bytes);
+                var ipaddrList = await Dns.GetHostAddressesAsync("localhost");
+
+                var remoteIp = ipaddrList.FirstOrDefault(x => x.AddressFamily == AddressFamily.InterNetwork);
+                if (remoteIp == null)
+                {
+                   throw new Exception($"Can not resolve ip of ");
+                }
+                await clientChannel.WriteAndFlushAsync(
+                    new DatagramPacket(
+                        buffer,
+                        new IPEndPoint(remoteIp, 6253)));
+
+                Console.WriteLine("Waiting for response.");
+
+                await Task.Delay(5000);
+                Console.WriteLine("Waiting for response time 5000 completed. Closing client channel.");
 
                 await clientChannel.CloseAsync();
             }
@@ -50,32 +70,21 @@ namespace TestClient
         static void Main() => RunClientAsync().Wait();
     }
 
-    public class EchoClientHandler : ChannelHandlerAdapter
+    public class LoggingClientHandler : SimpleChannelInboundHandler<DatagramPacket>
     {
-        readonly IByteBuffer initialMessage;
-
-        public EchoClientHandler()
+        protected override void ChannelRead0(IChannelHandlerContext ctx, DatagramPacket packet)
         {
-            this.initialMessage = Unpooled.Buffer(256);
-            byte[] messageBytes = Encoding.UTF8.GetBytes("Hello world");
-            this.initialMessage.WriteBytes(messageBytes);
-        }
+            Console.WriteLine($"Client Received => {packet}");
 
-        public override void ChannelActive(IChannelHandlerContext context) 
-            => context.WriteAndFlushAsync(new DatagramPacket(initialMessage, new DnsEndPoint("localhost", 6253)));
-
-        public override void ChannelRead(IChannelHandlerContext context, object message)
-        {
-            var byteBuffer = message as IByteBuffer;
-            if (byteBuffer != null)
+            if (!packet.Content.IsReadable())
             {
-                Console.WriteLine("Received from server: " + byteBuffer.ToString(Encoding.UTF8));
+                return;
             }
 
-            context.WriteAndFlushAsync(new DatagramPacket(byteBuffer, context.Channel.RemoteAddress));
+            string message = packet.Content.ToString(Encoding.UTF8);
+            Console.WriteLine($"Client received: {message}");
+            ctx.CloseAsync();
         }
-
-        public override void ChannelReadComplete(IChannelHandlerContext context) => context.Flush();
 
         public override void ExceptionCaught(IChannelHandlerContext context, Exception exception)
         {

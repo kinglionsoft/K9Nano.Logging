@@ -5,10 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="ClientApp\**" />
-    <Content Remove="ClientApp\**" />
-    <EmbeddedResource Remove="ClientApp\**" />
-    <None Remove="ClientApp\**" />
+    <PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -18,8 +15,10 @@
 
   <ItemGroup>
     <PackageReference Include="DotNetty.Handlers" Version="0.6.0" />
-    <PackageReference Include="DotNetty.Transport.Libuv" Version="0.6.0" />
+    <PackageReference Include="DotNetty.Transport" Version="0.6.0" />
   </ItemGroup>
 
-
+  <ItemGroup>
+    <ProjectReference Include="..\K9Nano.Logging\K9Nano.Logging.csproj" />
+  </ItemGroup>
 </Project>
