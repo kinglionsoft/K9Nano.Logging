@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using K9Nano.Logging.Abstractions;
 using Microsoft.Extensions.Hosting;
 
 namespace K9Nano.Logging.Web.Collector

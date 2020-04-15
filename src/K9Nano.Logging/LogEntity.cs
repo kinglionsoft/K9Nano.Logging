@@ -11,7 +11,7 @@ namespace K9Nano.Logging
         [ProtoMember(1)]
         public LogEventLevel Level { get; set; }
         [ProtoMember(2)]
-        public string Timestamp { get; set; }
+        public long Timestamp { get; set; }
         [ProtoMember(3)]
         public string Machine { get; set; }
         [ProtoMember(4)]

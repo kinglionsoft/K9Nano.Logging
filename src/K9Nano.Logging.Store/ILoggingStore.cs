@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace K9Nano.Logging.Web.Collector
+namespace K9Nano.Logging.Abstractions
 {
     public interface ILoggingStore
     {
@@ -11,6 +12,6 @@ namespace K9Nano.Logging.Web.Collector
 
         bool TrySave(LogEntity entity);
 
-        Task<Stream> DownloadAsync(string application, DateTime from, DateTime to, CancellationToken cancellation);
+        Task<IReadOnlyList<LogEntity>> QueryAsync(string application, DateTimeOffset from, DateTimeOffset to, CancellationToken cancellation);
     }
 }

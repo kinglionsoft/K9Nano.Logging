@@ -36,7 +36,7 @@ namespace K9Nano.Logging
         {
             var entity = new LogEntity
             {
-                Timestamp = logEvent.Timestamp.ToString("o"),
+                Timestamp = logEvent.Timestamp.ToUnixTimeMilliseconds(),
                 Level = logEvent.Level
             };
 
