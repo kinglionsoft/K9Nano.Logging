@@ -47,15 +47,16 @@ namespace K9Nano.Logging.Web.Collector
                     if (_serializer.TryDeserialize(data, out var result))
                     {
                         // Broadcast to clients
-                        _hubContext.Clients.All.SendAsync("ReceiveMessage", Format(result))
+                        _hubContext.Clients.Group("ALL").SendAsync("ReceiveMessage", result.Application, Format(result))
+                            .ConfigureAwait(false);
+                        _hubContext.Clients.Group(result.Application).SendAsync("ReceiveMessage", result.Application, Format(result))
                             .ConfigureAwait(false);
                         // save
                         _store.TrySave(result);
                     }
                 }
 
-                // todo To be optimized
-                // Schedule rolling job during the lowest period of the day
+                // todo To be optimized: Schedule rolling job during the lowest period of the day
                 if (rolling && (DateTime.Now - lastRollingTime).TotalHours >= 24)
                 {
                     Roll();
@@ -85,17 +86,17 @@ namespace K9Nano.Logging.Web.Collector
             var sb = new StringBuilder();
 
             sb.Append(localTime)
-                .Append(' ')
+                .Append("  ")
                 .Append(entity.GetLevel())
-                .Append(' ')
+                .Append("  ")
                 .Append(entity.Machine, 15)
-                .Append(' ')
+                .Append("  ")
                 .Append(entity.Application, 15)
-                .Append(' ')
+                .Append("  ")
                 .Append(entity.Category, 20)
-                .Append(' ')
+                .Append("  ")
                 .Append(entity.Message)
-                .Append(' ')
+                .Append("  ")
                 .Append(entity.Exception);
 
             return sb.ToString();
@@ -105,4 +106,5 @@ namespace K9Nano.Logging.Web.Collector
         {
             _greedyBatchBlock.Post(data);
         }
+    }
 }

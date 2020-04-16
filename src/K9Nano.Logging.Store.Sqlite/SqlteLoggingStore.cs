@@ -75,10 +75,16 @@ values (@Level,@Timestamp,@Machine,@Application,@Category,@Message,@Exception)",
 
         public async Task<IReadOnlyList<LogEntity>> QueryAsync(string application, DateTimeOffset from, DateTimeOffset to, CancellationToken cancellation)
         {
-            return (await _dbConnection.QueryAsync<LogEntity>(
-                @"select Level,Timestamp,Machine,Application,Category,Message,Exception
-from logs
-where Application=@application and Timestamp between @from and @to",
+            var sql = "select Level,Timestamp,Machine,Application,Category,Message,Exception from logs where ";
+            if (!string.IsNullOrEmpty(application))
+            {
+                sql += "Application=@application and Timestamp between @from and @to";
+            }
+            else
+            {
+                sql += "Timestamp between @from and @to";
+            }
+            return (await _dbConnection.QueryAsync<LogEntity>(sql,
                 new
                 {
                     application,

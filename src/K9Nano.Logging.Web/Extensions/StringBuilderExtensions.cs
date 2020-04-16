@@ -30,12 +30,28 @@ namespace K9Nano.Logging.Web.Extensions
                     }
                     else
                     {
-
+                        sb.Append(Short(text, fixedLength));
                     }
                 }
             }
 
             return sb;
+        }
+
+        private static string Short(string text, int maxLength)
+        {
+            var head = maxLength / 2;
+            int tail;
+            if (maxLength % 2 == 0)
+            {
+                tail = head - 1;
+            }
+            else
+            {
+                tail = head;
+            }
+
+            return text.Substring(0, head) + "~" + text.Substring(text.Length - tail);
         }
     }
 }

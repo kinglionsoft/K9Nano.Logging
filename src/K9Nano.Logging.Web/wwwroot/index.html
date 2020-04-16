@@ -9,12 +9,41 @@
     <link rel="stylesheet" href="css/site.css" />
 </head>
 <body>
+    <div class="fixed-top" style="background: white">
+        <form class="form-inline m-2" action="download">
+
+            <div class="input-group mr-sm-2">
+                <div class="input-group-prepend">
+                    <label class="input-group-text" for="inputApp">应用</label>
+                </div>
+                <select class="custom-select form-control" id="inputApp" name="app" style="min-width: 200px">
+                    <option selected value="ALL">全部</option>
+                </select>
+            </div>
+
+            <div class="input-group mr-sm-2">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">开始</div>
+                </div>
+                <input type="date" class="form-control" required name="from" id="inputFrom">
+            </div>
+
+            <div class="input-group mr-sm-2">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">结束</div>
+                </div>
+                <input type="date" class="form-control" required name="to" id="inputTo">
+            </div>
+
+            <button type="submit" class="btn btn-primary" id="btnDownload" style="width: 80px">下载</button>
+
+            <button type="button" class="btn btn-danger" style="width: 80px; margin-left: 20px" onclick="document.getElementById('messagesList').innerHTML = ''">清屏</button>        
+            
+            <button type="button" class="btn btn-info" style="width: 80px; margin-left: 20px" >暂停</button>
+
+        </form>
+    </div>
     <ul class="list-group" id="messagesList">
-        <li class="list-group-item">Cras justo odio</li>
-        <li class="list-group-item">Dapibus ac facilisis in</li>
-        <li class="list-group-item">Morbi leo risus</li>
-        <li class="list-group-item">Porta ac consectetur ac</li>
-        <li class="list-group-item">Vestibulum at eros</li>
     </ul>
 
     <script src="lib/jquery/dist/jquery.min.js"></script>

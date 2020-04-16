@@ -25,7 +25,8 @@ namespace K9Nano.Logging
 
         public string GetDatetimeString()
         {
-            var date = DateTimeOffset.FromUnixTimeMilliseconds(Timestamp);
+            // todo no timezone
+            var date = DateTimeOffset.FromUnixTimeMilliseconds(Timestamp).ToLocalTime();
             return date.ToString("o");
         }
 

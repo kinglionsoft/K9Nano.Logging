@@ -19,13 +19,14 @@ namespace K9Nano.Logging.Web.Controllers
 
         [HttpGet]
         [Route("download")]
-        public async Task<IActionResult> Download(string application, DateTimeOffset from, DateTimeOffset to)
+        public async Task<IActionResult> Download(string app, DateTimeOffset from, DateTimeOffset to)
         {
             if (from > to)
             {
                 return BadRequest("开始时间不能大于结束时间");
             }
-            var result = await _loggingStore.QueryAsync(application, from, to, HttpContext.RequestAborted);
+
+            var result = await _loggingStore.QueryAsync(app == AppConsts.GroupAll ? null : app, from, to.AddDays(1), HttpContext.RequestAborted);
             if (result.Count == 0)
             {
                 return BadRequest("没有查询到数据");
@@ -34,18 +35,18 @@ namespace K9Nano.Logging.Web.Controllers
 
             using (var zip = new ZipArchive(memory, ZipArchiveMode.Create, true))
             {
-                var entry = zip.CreateEntry(application + ".log");
+                var entry = zip.CreateEntry(app + ".log");
                 await using var writeStream = entry.Open();
                 await using var writer = new StreamWriter(writeStream, Encoding.UTF8);
                 foreach (var entity in result)
                 {
-                   await writer.WriteLineAsync(entity.ToString());
+                    await writer.WriteLineAsync(entity.ToString());
                 }
             }
 
             memory.Seek(0, SeekOrigin.Begin);
 
-            return File(memory, "application/x-zip-compressed", application + "-log.zip");
+            return File(memory, "application/x-zip-compressed", app + "-log.zip");
         }
     }
 }
