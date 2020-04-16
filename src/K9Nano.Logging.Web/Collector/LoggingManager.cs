@@ -31,6 +31,9 @@ namespace K9Nano.Logging.Web.Collector
                 {
                     if (_serializer.TryDeserialize(data, out var result))
                     {
+                        // Broadcast to clients
+
+                        // save
                         _store.TrySave(result);
                     }
                 }

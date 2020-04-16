@@ -17,18 +17,21 @@ namespace K9Nano.Logging.Store.Sqlite
     public class SqlteLoggingStore : ILoggingStore, IDisposable
     {
         private readonly SqliteStoreOptions _options;
-        private IDbConnection _dbConnection;
+        private readonly IDbConnection _dbConnection;
 
         public SqlteLoggingStore(IOptionsMonitor<SqliteStoreOptions> optionsMonitor)
         {
             _options = optionsMonitor.CurrentValue;
             var file = Path.Combine(_options.LogPath, "log.db");
             var newDb = !File.Exists(file);
-            _dbConnection = new SqliteConnection($"Data Source={file};Version=3;UTF8Encoding=True;");
-            if (newDb)
+            try
             {
-                _dbConnection.Execute(@"CREATE TABLE logs(
-Id INTEGER identity primary key AUTOINCREMENT,
+                _dbConnection = new SqliteConnection($"Data Source={file};");
+
+                if (newDb)
+                {
+                    _dbConnection.Execute(@"CREATE TABLE logs(
+Id INTEGER PRIMARY KEY AUTOINCREMENT,
 Level INTEGER,
 Timestamp INTEGER NOT NULL,
 Machine TEXT,
@@ -41,8 +44,14 @@ ThreadId TEXT);
 
 CREATE INDEX idx_logs_app_time ON logs (Application, Timestamp);
 ");
+                }
+                _dbConnection.Open();
             }
-            _dbConnection.Open();
+            catch (Exception e)
+            {
+                Console.WriteLine($"Sqlite startup failed: " + e);
+                throw;
+            }
         }
 
         public void Save(LogEntity entity)

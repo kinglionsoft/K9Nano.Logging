@@ -27,9 +27,36 @@ namespace K9Nano.Logging
         [ProtoMember(9)]
         public string ThreadId { get; set; }
 
+        public string GetDatetimeString()
+        {
+            var date = DateTimeOffset.FromUnixTimeMilliseconds(Timestamp);
+            return date.ToString("o");
+        }
+
+        public string GetLevel()
+        {
+            switch (Level)
+            {
+                case LogEventLevel.Verbose:
+                    return "V";
+                case LogEventLevel.Debug:
+                    return "D";
+                case LogEventLevel.Information:
+                    return "I";
+                case LogEventLevel.Warning:
+                    return "W";
+                case LogEventLevel.Error:
+                    return "E";
+                case LogEventLevel.Fatal:
+                    return "F";
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
         public override string ToString()
         {
-            return $"{Timestamp} {Level} {Machine} {Application} {Category} {Method} {Message} {Exception}";
+            return $"{GetDatetimeString()}|{GetLevel()}|{Machine}|{Application}|{Category}|{Method}|{Message}|{Exception}";
         }
     }
 }

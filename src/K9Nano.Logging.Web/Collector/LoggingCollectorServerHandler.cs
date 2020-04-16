@@ -3,6 +3,7 @@ using System.Text;
 using DotNetty.Buffers;
 using DotNetty.Transport.Channels;
 using DotNetty.Transport.Channels.Sockets;
+using K9Nano.Logging.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Serilog.Debugging;
@@ -12,14 +13,14 @@ namespace K9Nano.Logging.Web.Collector
     public class LoggingCollectorServerHandler :  SimpleChannelInboundHandler<DatagramPacket>
     {
         private readonly IServiceProvider _serviceProvider;
-        private readonly ISerializer _serializer;
         private readonly ILogger _logger;
+        private readonly ILoggingManager _loggingManager;
 
         public LoggingCollectorServerHandler(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
-            _serializer = serviceProvider.GetService<ISerializer>();
             _logger = serviceProvider.GetService<ILogger<LoggingCollectorServerHandler>>();
+            _loggingManager = serviceProvider.GetService<ILoggingManager>();
         }
 
         protected override void ChannelRead0(IChannelHandlerContext ctx, DatagramPacket packet)
@@ -34,11 +35,7 @@ namespace K9Nano.Logging.Web.Collector
 
             var buffer = new byte[packet.Content.ReadableBytes];
             packet.Content.ReadBytes(buffer);
-            var logEntity = _serializer.Deserialize(buffer);
-            _logger.LogInformation($"Server received: {logEntity}");
-            // Broadcast to client 
-
-            // Save
+            _loggingManager.Post(buffer);
         }
 
         public override void ChannelReadComplete(IChannelHandlerContext context) => context.Flush();

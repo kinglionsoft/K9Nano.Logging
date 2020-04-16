@@ -1,3 +1,5 @@
+using K9Nano.Logging.Abstractions;
+using K9Nano.Logging.Store.Sqlite;
 using K9Nano.Logging.Web.Collector;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -24,6 +26,10 @@ namespace K9Nano.Logging.Web
             services.AddHostedService<CollectorHostedService>();
 
             services.AddSingleton<ISerializer, ProtobufSerializer>();
+
+            services.AddSqliteLoggingStore(Configuration.GetSection("Sqlite"));
+
+            services.AddSingleton<ILoggingManager, LoggingManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

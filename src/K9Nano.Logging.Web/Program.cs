@@ -1,6 +1,8 @@
+using System;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+using Serilog.Debugging;
 
 namespace K9Nano.Logging.Web
 {
@@ -15,6 +17,13 @@ namespace K9Nano.Logging.Web
             Host.CreateDefaultBuilder(args)
                 .UseSerilog((hostingContext, loggerConfiguration) =>
                 {
+                    if (hostingContext.HostingEnvironment.IsDevelopment())
+                    {
+                        SelfLog.Enable(msg =>
+                        {
+                            Console.WriteLine(msg);
+                        });
+                    }
                     loggerConfiguration
                         .ReadFrom.Configuration(hostingContext.Configuration)
                         .Enrich.FromLogContext();
