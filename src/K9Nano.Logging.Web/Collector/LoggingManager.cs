@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Text;
 using System.Threading.Tasks;
 using K9Nano.Logging.Abstractions;
+using K9Nano.Logging.Web.Extensions;
+using K9Nano.Logging.Web.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 
@@ -11,18 +15,21 @@ namespace K9Nano.Logging.Web.Collector
         private readonly IHostApplicationLifetime _lifetime;
         private readonly ISerializer _serializer;
         private readonly ILoggingStore _store;
+        private readonly IHubContext<LogHub> _hubContext;
         private readonly GreedyBatchBlock<byte[]> _greedyBatchBlock;
         private readonly ServerOptions _options;
 
         public LoggingManager(IHostApplicationLifetime lifetime,
             ISerializer serializer,
             ILoggingStore store,
-            IOptionsMonitor<ServerOptions> optionsMonitor)
+            IOptionsMonitor<ServerOptions> optionsMonitor,
+            IHubContext<LogHub> hubContext)
         {
             _options = optionsMonitor.CurrentValue;
             _lifetime = lifetime;
             _serializer = serializer;
             _store = store;
+            _hubContext = hubContext;
             _greedyBatchBlock = new GreedyBatchBlock<byte[]>(1000);
             Task.Factory
                 .StartNew(Start, lifetime.ApplicationStopping, TaskCreationOptions.LongRunning, TaskScheduler.Default);
@@ -40,7 +47,8 @@ namespace K9Nano.Logging.Web.Collector
                     if (_serializer.TryDeserialize(data, out var result))
                     {
                         // Broadcast to clients
-
+                        _hubContext.Clients.All.SendAsync("ReceiveMessage", Format(result))
+                            .ConfigureAwait(false);
                         // save
                         _store.TrySave(result);
                     }
@@ -68,9 +76,33 @@ namespace K9Nano.Logging.Web.Collector
             }
         }
 
+        protected virtual string Format(LogEntity entity)
+        {
+            // todo  timezone ?
+            var localTime = DateTimeOffset.FromUnixTimeMilliseconds(entity.Timestamp)
+                .ToLocalTime()
+                .ToString("HH:mm:ss.fff");
+            var sb = new StringBuilder();
+
+            sb.Append(localTime)
+                .Append(' ')
+                .Append(entity.GetLevel())
+                .Append(' ')
+                .Append(entity.Machine, 15)
+                .Append(' ')
+                .Append(entity.Application, 15)
+                .Append(' ')
+                .Append(entity.Category, 20)
+                .Append(' ')
+                .Append(entity.Message)
+                .Append(' ')
+                .Append(entity.Exception);
+
+            return sb.ToString();
+        }
+
         public virtual void Post(byte[] data)
         {
             _greedyBatchBlock.Post(data);
         }
-    }
 }
