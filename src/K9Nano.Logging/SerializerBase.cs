@@ -50,25 +50,12 @@ namespace K9Nano.Logging
                 entity.Category = sourceContextValue;
             }
 
-            if (logEvent.Properties.TryGetValue(ThreadIdPropertyName, out var threadId))
-            {
-                var threadIdValue = ((ScalarValue)threadId).Value.ToString();
-                entity.ThreadId = threadIdValue;
-            }
-
-            if (logEvent.Properties.TryGetValue(MethodPropertyName, out var methodName))
-            {
-                var methodNameValue = ((ScalarValue)methodName).Value.ToString();
-                entity.Method = methodNameValue;
-            }
-
             if (logEvent.Properties.TryGetValue(MachineNamePropertyName, out var machineName))
             {
                 var machineNameValue = ((ScalarValue)machineName).Value.ToString();
                 entity.Machine = machineNameValue;
             }
 
-            // todo
             if (logEvent.Properties.TryGetValue(ApplicationPropertyName, out var appName))
             {
                 var appNameValue = ((ScalarValue)appName).Value.ToString();

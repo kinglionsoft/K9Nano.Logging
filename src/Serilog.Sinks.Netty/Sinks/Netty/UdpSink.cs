@@ -55,7 +55,7 @@ namespace Serilog.Sinks.Netty
                 try
                 {
                     var entity = _serializer.Map(logEvent);
-                    SelfLog.WriteLine($"Starting to send: {entity}");
+                    SelfLog.WriteLine("Starting to send: {0}", entity);
                     var data = _serializer.Serialize(entity);
                     var buffer = Unpooled.WrappedBuffer(data);
                     var packet = new DatagramPacket(buffer, _options.RemoteEndPoint);

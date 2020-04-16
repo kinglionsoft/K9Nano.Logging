@@ -19,13 +19,9 @@ namespace K9Nano.Logging
         [ProtoMember(5)]
         public string Category { get; set; }
         [ProtoMember(6)]
-        public string Method { get; set; }
-        [ProtoMember(7)]
         public string Message { get; set; }
-        [ProtoMember(8)]
+        [ProtoMember(7)]
         public string Exception { get; set; }
-        [ProtoMember(9)]
-        public string ThreadId { get; set; }
 
         public string GetDatetimeString()
         {
@@ -56,7 +52,7 @@ namespace K9Nano.Logging
 
         public override string ToString()
         {
-            return $"{GetDatetimeString()}|{GetLevel()}|{Machine}|{Application}|{Category}|{Method}|{Message}|{Exception}";
+            return $"{GetDatetimeString()}|{GetLevel()}|{Machine}|{Application}|{Category}|{Message}|{Exception ?? "-"}";
         }
     }
 }

@@ -45,7 +45,7 @@ namespace K9Nano.Logging.Web.Controllers
 
             memory.Seek(0, SeekOrigin.Begin);
 
-            return File(memory, "application/x-zip-compressed", application + ".zip");
+            return File(memory, "application/x-zip-compressed", application + "-log.zip");
         }
     }
 }

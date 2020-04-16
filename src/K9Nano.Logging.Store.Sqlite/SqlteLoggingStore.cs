@@ -37,10 +37,8 @@ Timestamp INTEGER NOT NULL,
 Machine TEXT,
 Application TEXT NOT NULL,
 Category TEXT,
-Method TEXT,
 Message TEXT,
-Exception TEXT,
-ThreadId TEXT);
+Exception TEXT);
 
 CREATE INDEX idx_logs_app_time ON logs (Application, Timestamp);
 ");
@@ -49,7 +47,7 @@ CREATE INDEX idx_logs_app_time ON logs (Application, Timestamp);
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Sqlite startup failed: " + e);
+                Console.WriteLine("Sqlite startup failed: " + e);
                 throw;
             }
         }
@@ -57,8 +55,8 @@ CREATE INDEX idx_logs_app_time ON logs (Application, Timestamp);
         public void Save(LogEntity entity)
         {
             _dbConnection.Execute(
-                @"insert into logs(Level,Timestamp,Machine,Application,Category,Method,Message,Exception,ThreadId)
-values (@Level,@Timestamp,@Machine,@Application,@Category,@Method,@Message,@Exception,@ThreadId)", entity);
+                @"insert into logs(Level,Timestamp,Machine,Application,Category,Message,Exception)
+values (@Level,@Timestamp,@Machine,@Application,@Category,@Message,@Exception)", entity);
         }
 
         public bool TrySave(LogEntity entity)
@@ -78,9 +76,10 @@ values (@Level,@Timestamp,@Machine,@Application,@Category,@Method,@Message,@Exce
         public async Task<IReadOnlyList<LogEntity>> QueryAsync(string application, DateTimeOffset from, DateTimeOffset to, CancellationToken cancellation)
         {
             return (await _dbConnection.QueryAsync<LogEntity>(
-                @"select Level,Timestamp,Machine,Application,Category,Method,Message,Exception,ThreadId
+                @"select Level,Timestamp,Machine,Application,Category,Message,Exception
 from logs
-where Application=@application and Timestamp between @from and @to", new
+where Application=@application and Timestamp between @from and @to", 
+                new
                 {
                     application,
                     from = from.ToUnixTimeMilliseconds(),

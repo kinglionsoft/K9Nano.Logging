@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using K9Nano.Logging.Abstractions;
 using Microsoft.Extensions.Hosting;
 
@@ -26,7 +27,6 @@ namespace K9Nano.Logging.Web.Collector
             while (true)
             {
                 var bufferList = _greedyBatchBlock.Receive();
-
                 foreach (var data in bufferList)
                 {
                     if (_serializer.TryDeserialize(data, out var result))
