@@ -13,5 +13,7 @@ namespace K9Nano.Logging.Abstractions
         bool TrySave(LogEntity entity);
 
         Task<IReadOnlyList<LogEntity>> QueryAsync(string application, DateTimeOffset from, DateTimeOffset to, CancellationToken cancellation);
+
+        void Delete(int keepDays);
     }
 }

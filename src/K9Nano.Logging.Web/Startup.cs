@@ -23,6 +23,8 @@ namespace K9Nano.Logging.Web
         {
             services.AddControllers();
 
+            services.Configure<ServerOptions>(Configuration.GetSection("Server"));
+
             services.AddHostedService<CollectorHostedService>();
 
             services.AddSingleton<ISerializer, ProtobufSerializer>();

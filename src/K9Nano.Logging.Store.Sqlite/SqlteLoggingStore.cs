@@ -51,7 +51,7 @@ CREATE INDEX idx_logs_app_time ON logs (Application, Timestamp);
                 throw;
             }
         }
-
+        
         public void Save(LogEntity entity)
         {
             _dbConnection.Execute(
@@ -78,7 +78,7 @@ values (@Level,@Timestamp,@Machine,@Application,@Category,@Message,@Exception)",
             return (await _dbConnection.QueryAsync<LogEntity>(
                 @"select Level,Timestamp,Machine,Application,Category,Message,Exception
 from logs
-where Application=@application and Timestamp between @from and @to", 
+where Application=@application and Timestamp between @from and @to",
                 new
                 {
                     application,
@@ -86,6 +86,13 @@ where Application=@application and Timestamp between @from and @to",
                     to = to.ToUnixTimeMilliseconds(),
                 }))
                 .ToList();
+        }
+
+        public void Delete(int keepDays)
+        {
+            var time = DateTimeOffset.Now.AddDays(-1 * keepDays)
+                 .ToUnixTimeMilliseconds();
+            _dbConnection.Execute("delete from logs where Timestamp<@time", new { time });
         }
 
         public void Dispose()

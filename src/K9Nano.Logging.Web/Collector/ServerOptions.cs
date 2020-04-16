@@ -5,7 +5,5 @@
         public int Port { get; set; } = 6253;
 
         public int KeepDays { get; set; } = 30;
-
-        public string LogPath { get; set; } = "logs";
     }
 }
