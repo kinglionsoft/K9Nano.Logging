@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using K9Nano.Logging.Abstractions;
 using K9Nano.Logging.Store.Sqlite;
 using K9Nano.Logging.Web.Collector;
@@ -68,6 +69,11 @@ namespace K9Nano.Logging.Web
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapGet("/", ctx =>
+                {
+                    ctx.Response.Redirect("index.html");
+                    return Task.CompletedTask;
+                });
                 endpoints.MapControllers();
                 endpoints.MapHub<LogHub>("/logHub");
             });

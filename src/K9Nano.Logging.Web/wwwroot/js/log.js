@@ -33,13 +33,21 @@ connection.start().then(function () {
     return console.error(err.toString());
 });
 
-connection.pus
-
 function join(add) {
-    connection.invoke("Join", add, currentGroup)
+    return connection.invoke("Join", add, currentGroup)
         .then(function () {
             console.log("Joined group: " + add + "; Removed from: " + currentGroup);
             currentGroup = add;
+        })
+        .catch(function (err) {
+            return console.error(err.toString());
+        });
+}
+
+function leave() {
+    return connection.invoke("Leave", currentGroup)
+        .then(function () {
+            console.log("Left from group: " + currentGroup);
         })
         .catch(function (err) {
             return console.error(err.toString());
@@ -56,10 +64,26 @@ $(function () {
             join($("#inputApp").val());
         });
 
-    $("#messagesList").on("click",
-        function(e) {
-            var li = $(e.target);
-            li.toggleClass('text-pre-wrap');
+    //$("#messagesList").on("click",
+    //    function (e) {
+    //        var li = $(e.target);
+    //        li.toggleClass('flex-column');
+    //    });
+
+    $("#btnPause").on("click",
+        function (e) {
+            var $this = $(this);
+            if ($this.text() == "暂停") {
+                leave()
+                    .then(function () {
+                        $this.text("恢复");
+                    });
+            } else {
+                join(currentGroup)
+                    .then(function () {
+                            $this.text("暂停");
+                        });
+            }
         });
 });
 

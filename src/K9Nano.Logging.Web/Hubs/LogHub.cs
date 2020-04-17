@@ -19,5 +19,10 @@ namespace K9Nano.Logging.Web.Hubs
 
             await Groups.AddToGroupAsync(Context.ConnectionId, add);
         }
+
+        public async Task Leave(string group)
+        {
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, group);
+        }
     }
 }
