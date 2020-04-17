@@ -68,6 +68,10 @@ button.accept-policy {
     white-space: pre-wrap !important;
 }
 
+.log-box-item {
+    margin: 0 0.5em;
+}
+
 .log-box .log-box-text {
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -88,6 +92,30 @@ button.accept-policy {
 
 .flex-column.log-box .log-box-label {
     display: inline-block
+}
+
+.log-box .log-box-text.d-w-2 {
+    width: 2em;
+}
+
+.log-box .log-box-text.d-w-5 {
+    width: 5em;
+}
+
+.log-box .log-box-text.d-w-6 {
+    width: 6em;
+}
+
+.log-box .log-box-text.d-w-10 {
+    width: 10em;
+}
+
+.log-box .log-box-text.d-w-50 {
+    width: 50em;
+}
+
+.flex-column.log-box .log-box-text {
+    width: auto !important;
 }
 
 .min-w-2 {

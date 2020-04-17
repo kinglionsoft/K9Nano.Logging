@@ -47,9 +47,9 @@ namespace K9Nano.Logging.Web.Collector
                     if (_serializer.TryDeserialize(data, out var result))
                     {
                         // Broadcast to clients
-                        _hubContext.Clients.Group("ALL").SendAsync("ReceiveMessage", result.Application, Format(result))
+                        _hubContext.Clients.Group("ALL").SendAsync("ReceiveMessage", result)
                             .ConfigureAwait(false);
-                        _hubContext.Clients.Group(result.Application).SendAsync("ReceiveMessage", result.Application, Format(result))
+                        _hubContext.Clients.Group(result.Application).SendAsync("ReceiveMessage", result)
                             .ConfigureAwait(false);
                         // save
                         _store.TrySave(result);

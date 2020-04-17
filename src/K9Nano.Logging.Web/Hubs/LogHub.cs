@@ -5,11 +5,6 @@ namespace K9Nano.Logging.Web.Hubs
 {
     public class LogHub: Hub
     {
-        public async Task SendMessage(string message)
-        {
-            await Clients.All.SendAsync("ReceiveMessage", message);
-        }
-
         public async Task Join(string add, string remove)
         {
             if (!string.IsNullOrEmpty(remove))
