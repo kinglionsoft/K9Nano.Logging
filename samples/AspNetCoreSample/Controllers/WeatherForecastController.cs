@@ -26,7 +26,15 @@ namespace AspNetCoreSample.Controllers
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {
-            _logger.LogError(new Exception("Test logging"), "GET /Weather");
+            try
+            {
+                Error();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(new Exception("Catch test logging", e), "GET /Weather");
+            }
+            
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
@@ -36,5 +44,7 @@ namespace AspNetCoreSample.Controllers
             })
             .ToArray();
         }
+
+        private void Error() => throw new Exception("Test logging");
     }
 }

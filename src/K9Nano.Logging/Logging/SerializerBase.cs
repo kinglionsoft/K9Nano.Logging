@@ -73,8 +73,8 @@ namespace K9Nano.Logging
         protected virtual string FormatException(Exception ex)
         {
             if (ex == null) return null;
-            // todo
-            return ex.Message;
+            // todo Pretty exception print
+            return ex.ToString();
         }
     }
 }
