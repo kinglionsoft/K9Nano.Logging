@@ -115,12 +115,15 @@ $(function () {
             '<span class="log-box-text d-w-10">' + log.category + '</span>' +
             '</div>' +
             '<div class="log-box-item">' +
+            '<label class="log-box-label text-black-50 min-w-4">Trace</label>' +
+            '<span class="log-box-text d-w-10">' + log.traceId + '</span>' +
+            '</div>' +
+            '<div class="log-box-item">' +
             '<label class="log-box-label text-black-50 min-w-4">消息</label>' +
             '<span class="log-box-text' + getMessageClass(log.exception) + '">' + encodedMsg(log.message) + '</span>' +
             '</div> ' +
             generateException(log.exception) +
-            '</section>' +
-            '</li>');
+            '</section></li>');
 
         var logs = $messagesList.children('li');
         if (logs.length > 500) {

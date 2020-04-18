@@ -41,6 +41,11 @@ namespace AspNetCoreSample
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapGet("/", ctx =>
+                {
+                    ctx.Response.Redirect("WeatherForecast");
+                    return Task.CompletedTask;
+                });
                 endpoints.MapControllers();
             });
         }

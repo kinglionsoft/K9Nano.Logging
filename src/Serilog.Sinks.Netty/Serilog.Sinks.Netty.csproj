@@ -5,12 +5,20 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DotNetty.Handlers" Version="0.6.0" />
-    <PackageReference Include="Serilog.Sinks.PeriodicBatching" Version="2.3.0" />
+    <Compile Include="..\K9Nano.Logging\Logging\ISerializer.cs" Link="Logging\ISerializer.cs" />
+    <Compile Include="..\K9Nano.Logging\Logging\LogEntity.cs" Link="Logging\LogEntity.cs" />
+    <Compile Include="..\K9Nano.Logging\Logging\ProtobufSerializer.cs" Link="Logging\ProtobufSerializer.cs" />
+    <Compile Include="..\K9Nano.Logging\Logging\SerializerBase.cs" Link="Logging\SerializerBase.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\K9Nano.Logging\K9Nano.Logging.csproj" />
+    <PackageReference Include="DotNetty.Handlers" Version="0.6.0" />
+    <PackageReference Include="Serilog.Sinks.PeriodicBatching" Version="2.3.0" />
+    <PackageReference Include="protobuf-net" Version="2.4.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Logging\" />
   </ItemGroup>
 
 </Project>

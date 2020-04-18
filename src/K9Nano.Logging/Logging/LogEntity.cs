@@ -19,8 +19,10 @@ namespace K9Nano.Logging
         [ProtoMember(5)]
         public string Category { get; set; }
         [ProtoMember(6)]
-        public string Message { get; set; }
+        public string TraceId { get; set; }
         [ProtoMember(7)]
+        public string Message { get; set; }
+        [ProtoMember(8)]
         public string Exception { get; set; }
 
         public string GetDatetimeString()

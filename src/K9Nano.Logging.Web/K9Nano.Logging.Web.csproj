@@ -18,4 +18,8 @@
     <ProjectReference Include="..\K9Nano.Logging.Store.Sqlite\K9Nano.Logging.Store.Sqlite.csproj" />
     <ProjectReference Include="..\K9Nano.Logging\K9Nano.Logging.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="logs\" />
+  </ItemGroup>
 </Project>
