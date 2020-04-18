@@ -8,10 +8,9 @@ namespace K9Nano.Logging
     public abstract class SerializerBase : ISerializer
     {
         protected const string SourceContextPropertyName = "SourceContext";
-        protected const string ThreadIdPropertyName = "ThreadId";
         protected const string ApplicationPropertyName = "Application";
-        protected const string MethodPropertyName = "Method";
         protected const string MachineNamePropertyName = "MachineName";
+        protected const string TraceIdPropertyName = "TraceId";
 
 
         public abstract LogEntity Deserialize(byte[] data);
@@ -62,12 +61,19 @@ namespace K9Nano.Logging
                 entity.Application = appNameValue;
             }
 
+            if (logEvent.Properties.TryGetValue(TraceIdPropertyName, out var traceId))
+            {
+                var traceIdValue = ((ScalarValue)traceId).Value.ToString();
+                entity.TraceId = traceIdValue;
+            }
+
             return entity;
         }
 
         protected virtual string FormatException(Exception ex)
         {
             if (ex == null) return null;
+            // todo
             return ex.Message;
         }
     }

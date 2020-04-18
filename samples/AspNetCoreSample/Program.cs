@@ -32,7 +32,8 @@ namespace AspNetCoreSample
                     // see: https://github.com/serilog/serilog-aspnetcore/issues/169
                     loggerConfiguration
                         .ReadFrom.Configuration(hostingContext.Configuration)
-                        .Enrich.FromLogContext();
+                        .Enrich.FromLogContext()
+                        .Enrich.WithCorrelationIdHeader("TraceId");
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {

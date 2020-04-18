@@ -73,7 +73,7 @@ function getMessageClass(exception) {
 
 function generateException(exception) {
     if (exception) {
-        return '<div class="log-box-item"><label class="log-box-label text-black-50 min-w-4">异常</label><span class="log-box-text">' + encodedMsg(log.exception) + '</span></div>';
+        return '<div class="log-box-item"><label class="log-box-label text-black-50 min-w-4">异常</label><span class="log-box-text">' + encodedMsg(exception) + '</span></div>';
     }
 
     return "";
@@ -92,7 +92,7 @@ $(function () {
             $("#inputApp").append('<option value="' + log.application + '">' + log.application + "</option>");
         }
 
-        $messagesList.append('<li class="list-group-item">' +
+       var html ='<li class="list-group-item">' +
             '<section class="log-box d-flex" onclick="$(this).toggleClass(\'flex-column\')">' +
             '<div class="log-box-item">' +
             '<label class="log-box-label text-black-50 min-w-4">时间</label>' +
@@ -116,14 +116,16 @@ $(function () {
             '</div>' +
             '<div class="log-box-item">' +
             '<label class="log-box-label text-black-50 min-w-4">Trace</label>' +
-            '<span class="log-box-text d-w-10">' + log.traceId + '</span>' +
+            '<span class="log-box-text d-w-10">' + (log.traceId || "") + '</span>' +
             '</div>' +
             '<div class="log-box-item">' +
             '<label class="log-box-label text-black-50 min-w-4">消息</label>' +
             '<span class="log-box-text' + getMessageClass(log.exception) + '">' + encodedMsg(log.message) + '</span>' +
             '</div> ' +
             generateException(log.exception) +
-            '</section></li>');
+            '</section></li>';
+
+       $messagesList.append(html);
 
         var logs = $messagesList.children('li');
         if (logs.length > 500) {
