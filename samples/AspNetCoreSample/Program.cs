@@ -33,7 +33,8 @@ namespace AspNetCoreSample
                     loggerConfiguration
                         .ReadFrom.Configuration(hostingContext.Configuration)
                         .Enrich.FromLogContext()
-                        .Enrich.WithCorrelationIdHeader("TraceId");
+                        //.Enrich.WithCorrelationIdHeader("TraceId")
+                        ;
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
