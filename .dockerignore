@@ -1,0 +1,9 @@
+/.git
+/build
+/proto
+/samples
+/test
+/src/Serilog.Sinks.Netty
+.gitignore
+*.md
+LICENSE
