@@ -1,0 +1,1 @@
+ d:\tools\protoc.exe --proto_path=..\..\proto --csharp_out=. ..\..\proto\log.proto

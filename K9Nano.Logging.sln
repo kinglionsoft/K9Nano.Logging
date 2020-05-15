@@ -30,6 +30,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "proto", "proto", "{48B544E1-CBDE-4D24-827F-5D1EEBB07004}"
+	ProjectSection(SolutionItems) = preProject
+		proto\log.proto = proto\log.proto
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleSample", "samples\ConsoleSample\ConsoleSample.csproj", "{DB6DCC35-20AB-4433-8808-5958C6C90B6A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -64,6 +71,10 @@ Global
 		{70C8C9C1-A1A0-4D00-A4CC-440B5F8162FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{70C8C9C1-A1A0-4D00-A4CC-440B5F8162FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{70C8C9C1-A1A0-4D00-A4CC-440B5F8162FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB6DCC35-20AB-4433-8808-5958C6C90B6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB6DCC35-20AB-4433-8808-5958C6C90B6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB6DCC35-20AB-4433-8808-5958C6C90B6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB6DCC35-20AB-4433-8808-5958C6C90B6A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -76,6 +87,7 @@ Global
 		{6A41EC89-3F62-46A4-96A2-98FFC5BC1975} = {B68A9C0B-DC9E-4879-BA33-9C508973B21C}
 		{0932A80E-4613-40B9-95F7-44175B1D12B8} = {0D42394F-BD63-4069-A09A-C29F7FD6463C}
 		{70C8C9C1-A1A0-4D00-A4CC-440B5F8162FB} = {0D42394F-BD63-4069-A09A-C29F7FD6463C}
+		{DB6DCC35-20AB-4433-8808-5958C6C90B6A} = {B68A9C0B-DC9E-4879-BA33-9C508973B21C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {11D081AF-65F6-40C5-9158-98C13A093995}

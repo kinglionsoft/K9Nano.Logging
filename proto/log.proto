@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+option csharp_namespace = "K9Nano.Logging";
+
+package logging;
+
+message LogEntity {
+	LogEventLevel level = 1;
+	int64 timestamp =2;
+	string machine = 3;
+	string application =4;
+	string category =5;
+	string trace_id=6;
+	string message = 7;
+	string exception = 8;
+}
+
+enum LogEventLevel
+{
+	Verbose = 0;
+	Debug = 1;
+	Information = 2;
+	Warning = 3;
+	Error = 4;
+	Fatal = 5;
+}
