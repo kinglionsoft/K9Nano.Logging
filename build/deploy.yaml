@@ -16,9 +16,12 @@ spec:
     spec:
       containers:
       - name: logging
-        image: registry.ytzx.com/ytzx/logging:1.0
+        image: registry.ytzx.com/ytzx/logging:6
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 80
           name: http
         - containerPort: 6253
           name: udp
+      imagePullSecrets:
+        - name: ytzx
