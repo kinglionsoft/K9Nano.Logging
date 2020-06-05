@@ -30,22 +30,24 @@ namespace ConsoleSample
                  .GetAwaiter()
                  .GetResult();
 
-            var entity = new LogEntity
-            {
-                Level = LogEventLevel.Information,
-                Machine = "YC",
-                Application = "ConsoleSample",
-                Category = "Test",
-                Message = "proto test",
-                Timestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds(),
-                TraceId = "12313",
-                Exception = "errors"
-            };
+         
             while (true)
             {
+                var entity = new LogEntity
+                {
+                    Level = LogEventLevel.Information,
+                    Machine = "YC",
+                    Application = "ConsoleSample",
+                    Category = "Test",
+                    Message = "proto test",
+                    Timestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds(),
+                    TraceId = "12313",
+                    Exception = "errors"
+                };
                 var data = entity.ToByteArray();
                 var buffer = Unpooled.WrappedBuffer(data);
-                var packet = new DatagramPacket(buffer, new IPEndPoint(IPAddress.Loopback, 6253));
+                var packet = new DatagramPacket(buffer, new IPEndPoint(IPAddress.Parse("192.168.2.24"), 32204));
+               // var packet = new DatagramPacket(buffer, new IPEndPoint(IPAddress.Loopback, 6253));
                 await clientChannel.WriteAndFlushAsync(packet)
                     .ConfigureAwait(false);
 
