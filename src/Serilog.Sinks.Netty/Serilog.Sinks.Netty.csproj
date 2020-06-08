@@ -2,6 +2,10 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Authors>K9</Authors>
+    <Company>K</Company>
+    <Description>Serilog扩展，将日志写入UDP服务器</Description>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>

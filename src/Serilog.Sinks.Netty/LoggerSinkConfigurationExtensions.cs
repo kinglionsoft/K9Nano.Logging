@@ -19,14 +19,13 @@ namespace Serilog
         {
             if (sinkConfiguration == null) throw new ArgumentNullException(nameof(sinkConfiguration));
 
-            if (string.IsNullOrWhiteSpace(options.Remote) || options.RemoteEndPoint == null)
+            if (string.IsNullOrWhiteSpace(options.Remote))
             {
                 SelfLog.WriteLine("Remote can not be null");
             }
 
             if (options.RemoteEndPoint == null)
             {
-                SelfLog.WriteLine($"Can not resolve IP of {options.Remote}");
                 return sinkConfiguration.Sink(new NullSink(), LevelAlias.Maximum, null);
             }
 

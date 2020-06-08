@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using Serilog.Debugging;
 
 namespace Serilog.Sinks.Netty
 {
@@ -23,9 +24,16 @@ namespace Serilog.Sinks.Netty
             {
                 if (_remoteEndPoint == null)
                 {
-                    var ip = Dns.GetHostAddresses(Remote)
-                        .FirstOrDefault(x => x.AddressFamily == AddressFamily.InterNetwork);
-                    _remoteEndPoint = new IPEndPoint(ip, RemotePort);
+                    try
+                    {
+                        var ip = Dns.GetHostAddresses(Remote)
+                                      .FirstOrDefault(x => x.AddressFamily == AddressFamily.InterNetwork);
+                        _remoteEndPoint = new IPEndPoint(ip, RemotePort);
+                    }
+                    catch 
+                    {
+                        SelfLog.WriteLine($"Can not resolve IP of {Remote}");
+                    }
                 }
 
                 return _remoteEndPoint;
