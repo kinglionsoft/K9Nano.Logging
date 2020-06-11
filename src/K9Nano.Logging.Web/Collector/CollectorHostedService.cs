@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using DotNetty.Buffers;
 using DotNetty.Handlers.Logging;
 using DotNetty.Transport.Bootstrapping;
 using DotNetty.Transport.Channels;
@@ -31,6 +32,7 @@ namespace K9Nano.Logging.Web.Collector
             _bootstrap.Group(_workerGroup)
                 .Channel<SocketDatagramChannel>()
                 .Option(ChannelOption.SoBroadcast, true)
+                .Option(ChannelOption.RcvbufAllocator, new FixedRecvByteBufAllocator(65535)) // 最大接收、发送的长度
                 .Handler(new ActionChannelInitializer<IChannel>(channel =>
                 {
                     var pipeline = channel.Pipeline;

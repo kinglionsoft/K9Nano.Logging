@@ -42,8 +42,7 @@ namespace K9Nano.Logging.Web.Collector
 
         public override void ExceptionCaught(IChannelHandlerContext context, Exception exception)
         {
-            Console.WriteLine("Exception: " + exception);
-            context.CloseAsync();
+            Console.WriteLine("LoggingCollectorServerHandler Exception: " + exception);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using DotNetty.Buffers;
 using K9Nano.Logging;
 using Serilog.Configuration;
 using Serilog.Core;
@@ -18,6 +19,8 @@ namespace Serilog
             LoggingLevelSwitch levelSwitch = null)
         {
             if (sinkConfiguration == null) throw new ArgumentNullException(nameof(sinkConfiguration));
+
+            Environment.SetEnvironmentVariable("io.netty.allocator.numDirectArenas", "0"); // 不记录一发送字节流
 
             if (string.IsNullOrWhiteSpace(options.Remote))
             {

@@ -23,11 +23,7 @@ namespace AspNetCoreSample
             Host.CreateDefaultBuilder(args)
                 .UseSerilog((hostingContext, loggerConfiguration) =>
                 {
-                    if (hostingContext.HostingEnvironment.IsDevelopment())
-                    {
-                        SelfLog.Enable(Console.WriteLine);
-                    }
-
+                    SelfLog.Enable(Console.WriteLine);
                     // No DI here, so get option from Environment temporary.
                     // see: https://github.com/serilog/serilog-aspnetcore/issues/169
                     loggerConfiguration

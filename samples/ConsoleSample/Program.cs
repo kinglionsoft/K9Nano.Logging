@@ -30,7 +30,8 @@ namespace ConsoleSample
                  .GetAwaiter()
                  .GetResult();
 
-         
+
+            var length = 100;
             while (true)
             {
                 var entity = new LogEntity
@@ -42,17 +43,21 @@ namespace ConsoleSample
                     Message = "proto test",
                     Timestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds(),
                     TraceId = "12313",
-                    Exception = "errors"
+                    Exception = new string('1', length)
                 };
                 var data = entity.ToByteArray();
                 var buffer = Unpooled.WrappedBuffer(data);
-                var packet = new DatagramPacket(buffer, new IPEndPoint(IPAddress.Parse("192.168.2.24"), 32204));
-               // var packet = new DatagramPacket(buffer, new IPEndPoint(IPAddress.Loopback, 6253));
+                Console.WriteLine($"Capacity: {buffer.Capacity}, MaxCapacity: {buffer.MaxCapacity}, {buffer.IoBufferCount}");
+                //var packet = new DatagramPacket(buffer, new IPEndPoint(IPAddress.Parse("192.168.2.24"), 32204));
+                var packet = new DatagramPacket(buffer, new IPEndPoint(IPAddress.Loopback, 6253));
                 await clientChannel.WriteAndFlushAsync(packet)
                     .ConfigureAwait(false);
 
                 var cmd = Console.ReadLine();
-                if (cmd == "q") break;
+                if (!int.TryParse(cmd, out length))
+                {
+                    break;
+                }
             }
 
             await clientChannel.CloseAsync();
