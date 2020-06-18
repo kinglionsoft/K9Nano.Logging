@@ -149,3 +149,15 @@ button.accept-policy {
 .min-w-50 {
     min-width: 50em;
 }
+
+.log-level-W {
+    color: #ffc107
+}
+
+.log-level-E {
+    color: red
+}
+
+.log-level-F {
+    color: purple
+}

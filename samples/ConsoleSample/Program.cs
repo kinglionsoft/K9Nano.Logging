@@ -53,11 +53,12 @@ namespace ConsoleSample
                 await clientChannel.WriteAndFlushAsync(packet)
                     .ConfigureAwait(false);
 
-                var cmd = Console.ReadLine();
-                if (!int.TryParse(cmd, out length))
-                {
-                    break;
-                }
+                await Task.Delay(20);
+                //var cmd = Console.ReadLine();
+                //if (!int.TryParse(cmd, out length))
+                //{
+                //    break;
+                //}
             }
 
             await clientChannel.CloseAsync();

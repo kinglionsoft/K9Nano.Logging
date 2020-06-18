@@ -23,5 +23,12 @@ spec:
           name: http
         - containerPort: 6253
           name: udp
+        volumeMounts:
+        - mountPath: /etc/localtime
+          name: time
       imagePullSecrets:
-        - name: ytzx
+      - name: ytzx     
+      volumes:          
+      - name: time
+        hostPath:
+          path: /etc/localtime

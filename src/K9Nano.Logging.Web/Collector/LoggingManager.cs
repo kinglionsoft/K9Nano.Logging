@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using K9Nano.Logging.Abstractions;
@@ -39,9 +40,10 @@ namespace K9Nano.Logging.Web.Collector
         {
             var rolling = _options.KeepDays > 0;
             var lastRollingTime = DateTime.Today.AddHours(2);
+            var bufferList = new List<byte[]>(1000);
             while (true)
             {
-                var bufferList = _greedyBatchBlock.Receive();
+                _greedyBatchBlock.Receive(bufferList);
                 foreach (var data in bufferList)
                 {
                     if (_serializer.TryDeserialize(data, out var result))

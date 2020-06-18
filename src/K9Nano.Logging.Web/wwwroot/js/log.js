@@ -91,8 +91,9 @@ $(function () {
             apps.push(log.application);
             $("#inputApp").append('<option value="' + log.application + '">' + log.application + "</option>");
         }
+        var logLevel = formatLevel(log.level);
 
-       var html ='<li class="list-group-item">' +
+        var html = '<li class="list-group-item">' +
             '<section class="log-box d-flex" onclick="$(this).toggleClass(\'flex-column\')">' +
             '<div class="log-box-item">' +
             '<label class="log-box-label text-black-50 min-w-4">时间</label>' +
@@ -100,7 +101,7 @@ $(function () {
             '</div>' +
             '<div class="log-box-item">' +
             '<label class="log-box-label text-black-50 min-w-4">级别</label>' +
-            '<span class="log-box-text d-w-2">' + formatLevel(log.level) + '</span>' +
+            '<span class="log-box-text d-w-2  log-level-' + logLevel + '">' + logLevel + '</span>' +
             '</div>' +
             '<div class="log-box-item">' +
             '<label class="log-box-label text-black-50 min-w-4">主机</label>' +
@@ -125,7 +126,7 @@ $(function () {
             generateException(log.exception) +
             '</section></li>';
 
-       $messagesList.append(html);
+        $messagesList.append(html);
 
         var logs = $messagesList.children('li');
         if (logs.length > 500) {
