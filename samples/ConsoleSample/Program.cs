@@ -31,7 +31,7 @@ namespace ConsoleSample
                  .GetResult();
 
 
-            var length = 100;
+            var length = 2000;
             while (true)
             {
                 var entity = new LogEntity
@@ -48,7 +48,7 @@ namespace ConsoleSample
                 var data = entity.ToByteArray();
                 var buffer = Unpooled.WrappedBuffer(data);
                 Console.WriteLine($"Capacity: {buffer.Capacity}, MaxCapacity: {buffer.MaxCapacity}, {buffer.IoBufferCount}");
-                //var packet = new DatagramPacket(buffer, new IPEndPoint(IPAddress.Parse("192.168.2.24"), 32204));
+               // var packet = new DatagramPacket(buffer, new IPEndPoint(IPAddress.Parse("192.168.2.21"), 32204));
                 var packet = new DatagramPacket(buffer, new IPEndPoint(IPAddress.Loopback, 6253));
                 await clientChannel.WriteAndFlushAsync(packet)
                     .ConfigureAwait(false);

@@ -33,9 +33,16 @@ namespace K9Nano.Logging.Web.Collector
                 return;
             }
 
-            var buffer = new byte[packet.Content.ReadableBytes];
-            packet.Content.ReadBytes(buffer);
-            _loggingManager.Post(buffer);
+            try
+            {
+                var buffer = new byte[packet.Content.ReadableBytes];
+                packet.Content.ReadBytes(buffer);
+                _loggingManager.Post(buffer);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ChannelRead0 Error:" + ex);
+            }
         }
 
         public override void ChannelReadComplete(IChannelHandlerContext context) => context.Flush();

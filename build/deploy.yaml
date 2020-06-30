@@ -26,6 +26,13 @@ spec:
         volumeMounts:
         - mountPath: /etc/localtime
           name: time
+        resources:       
+          limits:
+            cpu: 500m
+            memory: 1024Mi
+          requests:
+            cpu: 10m
+            memory: 200Mi
       imagePullSecrets:
       - name: ytzx     
       volumes:          
