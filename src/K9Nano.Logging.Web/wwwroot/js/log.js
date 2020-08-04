@@ -94,7 +94,7 @@ $(function () {
         var logLevel = formatLevel(log.level);
 
         var html = '<li class="list-group-item">' +
-            '<section class="log-box d-flex" onclick="$(this).toggleClass(\'flex-column\')">' +
+            '<section class="log-box d-flex" ondblclick="$(this).toggleClass(\'flex-column\')">' +
             '<div class="log-box-item">' +
             '<label class="log-box-label text-black-50 min-w-4">时间</label>' +
             '<span class="log-box-text d-w-6">' + formatDate(log.timestamp) + '</span>' +
