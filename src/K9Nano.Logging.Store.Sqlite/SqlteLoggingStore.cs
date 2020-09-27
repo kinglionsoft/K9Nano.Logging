@@ -11,6 +11,7 @@ using K9Nano.Logging.Abstractions;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Options;
 using Serilog.Debugging;
+using Serilog.Events;
 
 namespace K9Nano.Logging.Store.Sqlite
 {
@@ -74,9 +75,14 @@ values (@Level,@Timestamp,@Machine,@Application,@Category,@TraceId,@Message,@Exc
             }
         }
 
-        public async Task<IReadOnlyList<LogEntity>> QueryAsync(string application, DateTimeOffset from, DateTimeOffset to, CancellationToken cancellation)
+        public async Task<IReadOnlyList<LogEntity>> QueryAsync(string application,
+            LogEventLevel levelFrom,
+            LogEventLevel levelTo,
+            DateTimeOffset from, 
+            DateTimeOffset to, 
+            CancellationToken cancellation)
         {
-            var sql = "select Level,Timestamp,Machine,Application,Category,TraceId,Message,Exception from logs where ";
+            var sql = "select Level,Timestamp,Machine,Application,Category,TraceId,Message,Exception from logs where Level between @levelFrom and @levelTo";
             if (!string.IsNullOrEmpty(application))
             {
                 sql += "Application=@application and Timestamp between @from and @to";
@@ -89,6 +95,8 @@ values (@Level,@Timestamp,@Machine,@Application,@Category,@TraceId,@Message,@Exc
                 new
                 {
                     application,
+                    levelFrom,
+                    levelTo,
                     from = from.ToUnixTimeMilliseconds(),
                     to = to.ToUnixTimeMilliseconds(),
                 }))

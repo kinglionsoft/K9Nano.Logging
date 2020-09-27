@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using K9Nano.Logging.Abstractions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Serilog.Events;
 
 namespace K9Nano.Logging.Web.Controllers
 {
@@ -19,14 +21,23 @@ namespace K9Nano.Logging.Web.Controllers
 
         [HttpGet]
         [Route("download")]
-        public async Task<IActionResult> Download(string app, DateTimeOffset from, DateTimeOffset to)
+        public async Task<IActionResult> Download(string app, 
+            LogEventLevel levelFrom,
+            LogEventLevel levelTo,
+            DateTimeOffset from,
+            DateTimeOffset to)
         {
             if (from > to)
             {
                 return BadRequest("开始时间不能大于结束时间");
             }
 
-            var result = await _loggingStore.QueryAsync(app == AppConsts.GroupAll ? null : app, from, to.AddDays(1), HttpContext.RequestAborted);
+            var result = await _loggingStore.QueryAsync(app == AppConsts.GroupAll ? null : app,
+                levelFrom,
+                levelTo,
+                from,
+                to.AddDays(1),
+                HttpContext.RequestAborted);
             if (result.Count == 0)
             {
                 return BadRequest("没有查询到数据");

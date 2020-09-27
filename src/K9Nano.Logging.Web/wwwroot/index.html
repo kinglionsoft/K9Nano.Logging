@@ -23,6 +23,29 @@
 
             <div class="input-group mr-sm-2">
                 <div class="input-group-prepend">
+                    <label class="input-group-text" for="inputLevelFrom">级别</label>
+                </div>
+                <select class="custom-select form-control" id="inputLevelFrom" name="levelFrom" style="min-width: 50px">
+                    <option selected value="0">Verbose</option>
+                    <option value="1">Debug</option>
+                    <option value="2">Information</option>
+                    <option value="3">Warning</option>
+                    <option value="4">Error</option>
+                    <option value="5">Fetal</option>
+                </select>
+                <label style="padding: 0 5px"> 到 </label>
+                <select class="custom-select form-control" id="inputLevelTo" name="levelTo" style="min-width: 50px">
+                    <option value="0">Verbose</option>
+                    <option value="1">Debug</option>
+                    <option value="2">Information</option>
+                    <option value="3">Warning</option>
+                    <option value="4">Error</option>
+                    <option selected value="5">Fetal</option>
+                </select>
+            </div>
+
+            <div class="input-group mr-sm-2">
+                <div class="input-group-prepend">
                     <div class="input-group-text">开始</div>
                 </div>
                 <input type="date" class="form-control" required name="from" id="inputFrom">

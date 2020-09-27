@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using Serilog.Events;
 
 namespace K9Nano.Logging.Abstractions
 {
@@ -12,7 +13,7 @@ namespace K9Nano.Logging.Abstractions
 
         bool TrySave(LogEntity entity);
 
-        Task<IReadOnlyList<LogEntity>> QueryAsync(string application, DateTimeOffset from, DateTimeOffset to, CancellationToken cancellation);
+        Task<IReadOnlyList<LogEntity>> QueryAsync(string application, LogEventLevel levelFrom, LogEventLevel levelTo,  DateTimeOffset from, DateTimeOffset to, CancellationToken cancellation);
 
         void Delete(int keepDays);
     }
