@@ -85,11 +85,11 @@ values (@Level,@Timestamp,@Machine,@Application,@Category,@TraceId,@Message,@Exc
             var sql = "select Level,Timestamp,Machine,Application,Category,TraceId,Message,Exception from logs where Level between @levelFrom and @levelTo";
             if (!string.IsNullOrEmpty(application))
             {
-                sql += "Application=@application and Timestamp between @from and @to";
+                sql += " and Application=@application and Timestamp between @from and @to";
             }
             else
             {
-                sql += "Timestamp between @from and @to";
+                sql += " and Timestamp between @from and @to";
             }
             return (await _dbConnection.QueryAsync<LogEntity>(sql,
                 new
